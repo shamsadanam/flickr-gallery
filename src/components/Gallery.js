@@ -1,6 +1,6 @@
 import React from "react";
 
-const Gallery = ({ photos }) => {
+const Gallery = ({ state: { photos, loader } }) => {
   const renderPhotos = (photos) => {
     return photos.map(({ server, id, secret, title }) => {
       return (
@@ -14,7 +14,7 @@ const Gallery = ({ photos }) => {
     });
   };
 
-  return <>{(photos && renderPhotos(photos)) || "Loading"}</>;
+  return <>{(photos && renderPhotos(photos)) || (loader && "Loading")}</>;
 };
 
 export default Gallery;

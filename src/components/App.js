@@ -1,24 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import flickr from "../apis/flickr";
+import Search from "./Search";
 import Gallery from "./Gallery";
 
 import "./App.scss";
 
 const App = () => {
-  const [photos, setPhotos] = useState();
+  const [appState, setAppState] = useState({
+    photos: [],
+    loader: true,
+  });
 
-  useEffect(() => {
-    (async () => {
-      const result = await flickr.get("", { params: { tags: "Nature" } });
-      console.log(result.data.photos.photo);
-      setPhotos(result.data.photos.photo);
-    })();
-  }, []);
+  const searchHandler = async (key) => {
+    setAppState({ loader: true });
+    const result = await flickr.get("", { params: { tags: key } });
+    console.log("searched");
+    console.log(result.data.photos.photo);
+    setAppState({ photos: result.data.photos.photo, loader: false });
+  };
 
   return (
     <div className="container">
+      <Search searchHandler={searchHandler} />
       <ul>
-        <Gallery photos={photos} />
+        <Gallery state={appState} />
       </ul>
     </div>
   );

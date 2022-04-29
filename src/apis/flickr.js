@@ -9,5 +9,6 @@ export default axios.create({
     per_page: 24,
     format: "json",
     nojsoncallback: 1,
+    safe_search: 1,
   },
 });
