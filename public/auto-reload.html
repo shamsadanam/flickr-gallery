@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auto Reload</title>
+  </head>
+  <style>
+    .container {
+      width: 80%;
+      margin: 20px auto;
+    }
+    input,
+    button {
+      font-size: 16px;
+    }
+    .iframe-container {
+      max-width: 100%;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <form action="">
+        <input type="text" id="pageURL" placeholder="Enter an URL to Reload" />
+        <input
+          type="text"
+          id="reloadInterval"
+          placeholder="Reload Interval(Miniutes)"
+        />
+        <button id="start">Start Reloading</button>
+        <button id="stop">Stop Reloading</button>
+      </form>
+      <div class="iframe-container">
+        <iframe
+          width="100%"
+          height="900px"
+          id="page"
+          src=""
+          frameborder="0"
+        ></iframe>
+      </div>
+    </div>
+    <script>
+      let reload;
+      let count = 0;
+
+      const startReloading = (e) => {
+        e.preventDefault();
+
+        let reloadInterval =
+          Math.abs(document.querySelector("#reloadInterval").value) > 30
+            ? Math.abs(document.querySelector("#reloadInterval").value) *
+              60 *
+              1000
+            : 30 * 60 * 1000;
+
+        console.log(`Reloading Started for ${reloadInteral} minutes interval`);
+
+        reload = setInterval(() => {
+          document.querySelector("#page").src =
+            document.querySelector("#page").src;
+          console.log(`Reloaded ${+count} times`);
+        }, reloadInterval);
+      };
+
+      const setPageURL = () => {
+        let pageURL = document.querySelector("#pageURL").value;
+        pageURL = pageURL.indexOf("www") !== -1 ? pageURL : `www.${pageURL}`;
+        pageURL =
+          pageURL.indexOf("http") !== -1 ? pageURL : `https://${pageURL}`;
+        document.querySelector("#page").src = pageURL;
+      };
+
+      stopReloading = () => {
+        clearInterval(reload);
+        console.log("Reloading Stopped");
+      };
+
+      document.querySelector("#pageURL").addEventListener("blur", setPageURL);
+
+      document
+        .querySelector("#start")
+        .addEventListener("click", startReloading);
+
+      document.querySelector("#stop").addEventListener("click", stopReloading);
+    </script>
+  </body>
+</html>
